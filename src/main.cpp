@@ -24,8 +24,8 @@
 //-------------------- USER DEFINED SETTINGS --------------------//
 
 //Uncomment one below
-// #define __CO2__
-#define __PM25__ 
+#define __CO2__
+// #define __PM25__ 
 // #define __VOC__
 
 const int CO2_1[17] = { 1609, 577, 406, 419, 443, 414, 403, 413, 409, 411, 412, 409, 423, 414, 421, 434, 421 };
@@ -49,10 +49,11 @@ Bounce button1 = Bounce(1, 15);
 
 bool isButton0Pressed, isButton1Pressed; //track response to button triggered
 
+/*
 Adafruit_VL53L0X lox = Adafruit_VL53L0X(); //SDL to 19 and SDA to 18
-int rangeVal;
+int rangeVal; //reading in mm
 elapsedMillis loxmsec; //to track that it takes measurement at an interval of around 100ms instead of continuously
-
+*/
 //-------------------- Light --------------------//
 #define STRIP1PIN 4
 #define STRIP2PIN 5
@@ -84,14 +85,15 @@ int readings1[26], readings2[22];
 
 #define UPDATES_PER_SECOND 100 //speed of light animation
 const int IDLE_MODE = 1, BUTTON_MODE = 2;
+unsigned int strip1playMode = IDLE_MODE, strip2playMode = IDLE_MODE; 
 
 CRGB leds0[BAND1]; CRGB leds1[BAND2];
-int strip1brightness, strip2brightness; //band brightness
+
+int strip1brightness = 0, strip2brightness = 0; //band brightness
 int strip1maxBrightLvl = 255, strip2maxBrightLvl = 255; //variable max brightness
-unsigned int strip1playMode = IDLE_MODE, strip2playMode = IDLE_MODE; 
-bool strip1hasPlayModeChanged, strip2hasplayModeChanged; //for audio track changes
-int strip1activeLedState = 0, strip2activeLedState;            //to track led animaton states, e.g. 0 - idle mode, start fade to black 1 - show brightness according to reading, 2 - has completed animations, fade to black and idle
-bool strip1isMaxBrightness, strip2isMaxBrightness;      //to track idle animation direction
+bool strip1hasPlayModeChanged = false, strip2hasPlayModeChanged = false; //for audio track changes
+int strip1activeLedState = 0, strip2activeLedState = 0;            //to track led animaton states, e.g. 0 - idle mode, start fade to black 1 - show brightness according to reading, 2 - has completed animations, fade to black and idle
+bool strip1isMaxBrightness = false, strip2isMaxBrightness = false;      //to track idle animation direction
 elapsedMillis strip1bandms, strip2bandms;              //multiple use time ellapsed counter
 unsigned int strip1bandDelay = BAND_DELAY, strip2bandDelay = BAND_DELAY; //speed of fade animation
 unsigned int strip1readingsCounter, strip2readingsCounter;                 //keeps track of indexing the readings array
@@ -106,16 +108,14 @@ void setup()
   pinMode(1, INPUT_PULLUP);
 
   Serial.begin(9600);
-
-  while (! Serial) {
-    delay(1);
-  }
   
+  /*
   Serial.println("Adafruit VL53L0X test");
   if (!lox.begin()) {
     Serial.println(F("Failed to boot VL53L0X"));
     while(1);
   }
+  */
 
   delay(2000); //power up safety delay
 
@@ -127,25 +127,36 @@ void setup()
   delay(10);
 
   register_readings(); //translate the air measurement data points into a readings[] brightness value array
+
+  Serial.println("start");
 }
 
 //-------------------- Loop --------------------//
 void loop() 
 {
-  read_console();
+  read_console(); //gets input from dist sensor and buttons
 
-  check_playMode();
+  // do_colour_variation(); //changes hue of both strips according to dist sensor
+
+  set_playMode();
 
   if (strip1playMode == IDLE_MODE)
   {
-    strip1_fade_animation();
+    strip1_idle_animation();
   }
   else if (strip1playMode == BUTTON_MODE)
   {
     strip1_playback_readings(); //play brightness sequence according to readings[] array
   }
 
-  
+  if (strip2playMode == IDLE_MODE)
+  {
+    strip2_idle_animation();
+  } 
+  else if (strip2playMode == BUTTON_MODE)
+  {
+    strip2_playback_readings(); //play brightness sequence according to readings[] array
+  } 
 
   FastLED.show();
   FastLED.delay(1000 / UPDATES_PER_SECOND);
