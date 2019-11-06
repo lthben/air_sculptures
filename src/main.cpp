@@ -24,8 +24,8 @@
 //-------------------- USER DEFINED SETTINGS --------------------//
 
 //Uncomment one below
-#define __CO2__
-// #define __PM25__ 
+// #define __CO2__
+#define __PM25__ 
 // #define __VOC__
 
 const int CO2_1[17] = { 1609, 577, 406, 419, 443, 414, 403, 413, 409, 411, 412, 409, 423, 414, 421, 434, 421 };
@@ -37,7 +37,7 @@ const int PM25_2[32] = { 65, 88, 44, 42, 73, 69, 70, 61, 54, 89, 86, 91, 60, 63,
 const int VOC_1[26] = { 8, 11, 5, 13, 16, 14, 15, 17, 15, 20, 29, 21, 22, 19, 14, 13, 19, 25, 17, 15, 13, 17, 16, 15, 20, 17 };
 const int VOC_2[22] = { 122, 67, 24, 36, 46, 32, 29, 34, 27, 25, 22, 23, 19, 23, 21, 33, 26, 34, 41, 15, 25, 18 };
 
-const int CO2band1 = 50, CO2band2 = 50, PM25band1 = 50, PM25band2 = 50, VOCband1 = 50, VOCband2 = 50; //num of pixels per strip. Each pixel is 10cm.
+const int CO2band1 = 70, CO2band2 = 70, PM25band1 = 50, PM25band2 = 50, VOCband1 = 50, VOCband2 = 50; //num of pixels per strip. Each pixel is 10cm.
 
 CHSV cblue(140,255,255);
 const int BAND_DELAY = 500;   //controls led animation speed
@@ -57,7 +57,7 @@ AudioControlSGTL5000 sgtl5000_1; //xy=615,336
 #define SDCARD_MOSI_PIN 7
 #define SDCARD_SCK_PIN 14
 
-float vol = 0.7; //master volume gain 0.0 - 1.0
+float vol = 0.4; //master volume gain 0.0 - 1.0
 
 const char *idleTrack = "DRONE1.WAV"; const char *activeTrack = "DRONE2.WAV";
 
@@ -68,11 +68,11 @@ Bounce button1 = Bounce(1, 15);
 
 bool isButton0Pressed, isButton1Pressed; //track response to button triggered
 
-/*
 Adafruit_VL53L0X lox = Adafruit_VL53L0X(); //SDL to 19 and SDA to 18
 int rangeVal; //reading in mm
 elapsedMillis loxmsec; //to track that it takes measurement at an interval of around 100ms instead of continuously
-*/
+bool isUserPresent = false;
+
 //-------------------- Light --------------------//
 #define STRIP1PIN 4
 #define STRIP2PIN 5
@@ -128,13 +128,11 @@ void setup()
 
   Serial.begin(9600);
   
-  /*
   Serial.println("Adafruit VL53L0X test");
   if (!lox.begin()) {
     Serial.println(F("Failed to boot VL53L0X"));
     while(1);
   }
-  */
 
   AudioMemory(8);
 
@@ -162,8 +160,6 @@ void setup()
   delay(10);
 
   register_readings(); //translate the air measurement data points into a readings[] brightness value array
-
-  Serial.println("start");
 }
 
 //-------------------- Loop --------------------//
@@ -171,7 +167,7 @@ void loop()
 {
   read_console(); //gets input from dist sensor and buttons
 
-  // do_colour_variation(); //changes hue of both strips according to dist sensor
+  do_colour_variation(); //changes hue of both strips according to dist sensor
 
   set_playMode();
 

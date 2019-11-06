@@ -18,7 +18,6 @@ void read_console()
     Serial.println("button1 pressed");
   }
  
-/*
   if (loxmsec > 100)
   {
     VL53L0X_RangingMeasurementData_t measure;
@@ -29,29 +28,43 @@ void read_console()
     if (measure.RangeStatus != 4) 
     {  // phase failures have incorrect data
       rangeVal = measure.RangeMilliMeter;
-      rangeVal = constrain(rangeVal, 50, 500); //range of travel for hand in mm
-      // Serial.print("Distance (mm): "); Serial.println(rangeVal);
+
+      if (rangeVal > 1000)
+      {
+        isUserPresent = false;
+      }
+      else
+      {
+        isUserPresent = true;
+      }
+      Serial.print("Distance (mm): "); Serial.println(rangeVal);
     } 
     else 
     {
       // Serial.println(" out of range ");
+      isUserPresent = false;
     }
 
     loxmsec = 0; //refresh timer for next reading
   }
-  */
 }
 
 /*--------------------------------------------------------------------------------
   Changes both led strips colour in real time according to the dist sensor
 --------------------------------------------------------------------------------*/
-/*
 void do_colour_variation() 
 {
-  strip1Color.hue = map(rangeVal, 50, 500, 76, 140);
-  strip2Color.hue = map(rangeVal, 50, 500, 140, 204);
+  if (isUserPresent == true)
+  {
+    strip1Color.hue = map(rangeVal, 0, 500, 76, 204);
+    strip2Color.hue = map(rangeVal, 0, 500, 76, 204);
+  }
+  else 
+  {
+    strip1Color.hue = cblue.hue;
+    strip2Color.hue = cblue.hue;
+  }
 }
-*/
 
 /*--------------------------------------------------------------------------------
   Done once during setup(). Translates the raw data readings into brightness values.
