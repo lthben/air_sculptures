@@ -349,7 +349,7 @@ void strip1_playback_readings()
 
       strip1bandms = 0; //need to reset here
 
-      int numElements = sizeof(readings1)/sizeof(readings1[0]);
+      unsigned int numElements = sizeof(readings1)/sizeof(readings1[0]);
 
       if (strip1readingsCounter == numElements)
       {
@@ -418,7 +418,7 @@ void strip2_playback_readings()
 
       strip2bandms = 0; //need to reset here
 
-      int numElements = sizeof(readings2)/sizeof(readings2[0]);
+      unsigned int numElements = sizeof(readings2)/sizeof(readings2[0]);
 
       if (strip2readingsCounter == numElements)
       {
@@ -435,4 +435,49 @@ void strip2_playback_readings()
       strip2_go_idle();
     }
   }  
+}
+
+/*--------------------------------------------------------------------------------
+  Selects the tracks according to playMode
+--------------------------------------------------------------------------------*/
+void play_audio()
+{
+  if (strip1playMode == IDLE_MODE && strip2playMode == IDLE_MODE)
+  {
+    if ( (strip1hasPlayModeChanged == true || strip2hasPlayModeChanged) && playSdWav1.isPlaying() == true)
+    {
+      playSdWav1.stop();
+      playSdWav1.play(idleTrack);
+      delay(10);
+      Serial.print("Start playing ");
+      Serial.println(idleTrack);
+      strip1hasPlayModeChanged = strip2hasPlayModeChanged = false;
+    }
+    else if (playSdWav1.isPlaying() == false)
+    {
+      playSdWav1.play(idleTrack);
+      delay(10);
+      Serial.print("Start playing ");
+      Serial.println(idleTrack);
+    }
+  }
+  else if (strip1playMode == BUTTON_MODE || strip2playMode == BUTTON_MODE)
+  {
+    if ( (strip1hasPlayModeChanged == true || strip2hasPlayModeChanged == true) && playSdWav1.isPlaying() == true)
+    {
+      playSdWav1.stop();
+      playSdWav1.play(activeTrack);
+      delay(10);
+      Serial.print("Start playing ");
+      Serial.println(activeTrack);
+      strip1hasPlayModeChanged = strip2hasPlayModeChanged = false;
+    }
+    else if (playSdWav1.isPlaying() == false)
+    {
+      playSdWav1.play(activeTrack);
+      delay(10);
+      Serial.print("Start playing ");
+      Serial.println(activeTrack);
+    }
+  }
 }

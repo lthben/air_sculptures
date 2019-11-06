@@ -42,6 +42,25 @@ const int CO2band1 = 50, CO2band2 = 50, PM25band1 = 50, PM25band2 = 50, VOCband1
 CHSV cblue(140,255,255);
 const int BAND_DELAY = 500;   //controls led animation speed
 
+//-------------------- Audio --------------------//
+
+// GUItool: begin automatically generated code. See https://www.pjrc.com/teensy/gui/index.html
+AudioPlaySdWav playSdWav1; //xy=416,186
+AudioOutputI2S i2s1;       //xy=821,189
+AudioConnection patchCord1(playSdWav1, 0, i2s1, 0);
+AudioConnection patchCord2(playSdWav1, 1, i2s1, 1);
+AudioControlSGTL5000 sgtl5000_1; //xy=615,336
+// GUItool: end automatically generated code
+
+// Use these with the Teensy Audio Shield
+#define SDCARD_CS_PIN 10
+#define SDCARD_MOSI_PIN 7
+#define SDCARD_SCK_PIN 14
+
+float vol = 0.7; //master volume gain 0.0 - 1.0
+
+const char *idleTrack = "DRONE1.WAV"; const char *activeTrack = "DRONE2.WAV";
+
 //-------------------- Buttons and distance sensor --------------------//
 
 Bounce button0 = Bounce(0, 15); // 15 = 15 ms debounce time
@@ -117,6 +136,22 @@ void setup()
   }
   */
 
+  AudioMemory(8);
+
+  sgtl5000_1.enable();
+  sgtl5000_1.volume(vol);
+
+  SPI.setMOSI(SDCARD_MOSI_PIN);
+  SPI.setSCK(SDCARD_SCK_PIN);
+  if (!(SD.begin(SDCARD_CS_PIN)))
+  {
+    while (1)
+    {
+      Serial.println("Unable to access the SD card");
+      delay(500);
+    }
+  }
+
   delay(2000); //power up safety delay
 
   FastLED.addLeds<LED_TYPE, STRIP1PIN, COLOR_ORDER>(leds0, BAND1);
@@ -160,5 +195,7 @@ void loop()
 
   FastLED.show();
   FastLED.delay(1000 / UPDATES_PER_SECOND);
+  
+  play_audio();
 }
 
