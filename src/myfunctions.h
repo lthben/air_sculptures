@@ -5,7 +5,7 @@
 void read_console()
 {
   button0.update();
-  button1.update();
+  button1.update(); 
 
   if (button0.fallingEdge())
   {
@@ -37,7 +37,7 @@ void read_console()
       {
         isUserPresent = true;
       }
-      Serial.print("Distance (mm): "); Serial.println(rangeVal);
+      // Serial.print("Distance (mm): "); Serial.println(rangeVal);
     } 
     else 
     {

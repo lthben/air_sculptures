@@ -2,7 +2,7 @@
   Author: Benjamin Low (Lthben@gmail.com)
   Date: Oct 2019
   Description: 
-      Teensy 3.2 with audio shield. 
+      This version uses the Teensy 3.2 with audio shield. 
       Sculpture 1, 2 and 3 have two buttons and one distance sensor each.
       The two buttons play back the two sets of air measurements readings translated into brightness values. 
       One button represents one set of reading and one strip of led.
@@ -24,9 +24,11 @@
 //-------------------- USER DEFINED SETTINGS --------------------//
 
 //Uncomment one below
-// #define __CO2__
-#define __PM25__ 
+#define __CO2__
+// #define __PM25__ 
 // #define __VOC__
+
+const int CO2band1 = 25, CO2band2 = 25, PM25band1 = 50, PM25band2 = 50, VOCband1 = 50, VOCband2 = 50; //num of pixels per strip. Each pixel is 10cm.
 
 const int CO2_1[17] = { 1609, 577, 406, 419, 443, 414, 403, 413, 409, 411, 412, 409, 423, 414, 421, 434, 421 };
 const int CO2_2[40] = { 1685, 642, 618, 698, 697, 778, 450, 664, 648, 676, 425, 504, 550, 481, 640, 942, 1791, 504, 733, 688, 592, 608, 850, 779, 1876, 646, 648, 659, 893, 422, 455, 701, 716, 892, 1046, 455, 483, 503, 448, 550 };
@@ -36,8 +38,6 @@ const int PM25_2[32] = { 65, 88, 44, 42, 73, 69, 70, 61, 54, 89, 86, 91, 60, 63,
 
 const int VOC_1[26] = { 8, 11, 5, 13, 16, 14, 15, 17, 15, 20, 29, 21, 22, 19, 14, 13, 19, 25, 17, 15, 13, 17, 16, 15, 20, 17 };
 const int VOC_2[22] = { 122, 67, 24, 36, 46, 32, 29, 34, 27, 25, 22, 23, 19, 23, 21, 33, 26, 34, 41, 15, 25, 18 };
-
-const int CO2band1 = 70, CO2band2 = 70, PM25band1 = 50, PM25band2 = 50, VOCband1 = 50, VOCband2 = 50; //num of pixels per strip. Each pixel is 10cm.
 
 CHSV cblue(140,255,255);
 const int BAND_DELAY = 500;   //controls led animation speed
@@ -74,8 +74,6 @@ elapsedMillis loxmsec; //to track that it takes measurement at an interval of ar
 bool isUserPresent = false;
 
 //-------------------- Light --------------------//
-#define STRIP1PIN 4
-#define STRIP2PIN 5
 
 #define LED_TYPE UCS1903
 #define COLOR_ORDER GRB //Yes! GRB!
@@ -87,16 +85,22 @@ CHSV strip2Color = cblue;
 const int BAND1 = CO2band1, BAND2 = CO2band2;
 const int SCULPTURE_ID = 1;
 int readings1[17], readings2[40];
+const int STRIP1PIN = 4;
+const int STRIP2PIN = 5;
 
 #elif defined(__PM25__)
 const int BAND1 = PM25band1, BAND2 = PM25band2; 
 const int SCULPTURE_ID = 2;
 int readings1[20], readings2[32];
+const int STRIP1PIN = 5;
+const int STRIP2PIN = 8;
 
 #elif defined(__VOC__)
 const int BAND1 = VOCband1, BAND2 = VOCband2;
 const int SCULPTURE_ID = 3;
 int readings1[26], readings2[22];
+const int STRIP1PIN = 4;
+const int STRIP2PIN = 5;
 
 #else
 #error "invalid sculpture ID"
