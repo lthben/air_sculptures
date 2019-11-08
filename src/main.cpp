@@ -1,14 +1,16 @@
 /*
   Author: Benjamin Low (Lthben@gmail.com)
   Date: Oct 2019
-  Description: 
-      This version uses the Teensy 3.2 with audio shield. 
-      Sculpture 1, 2 and 3 have two buttons and one distance sensor each.
+  Description: Air sculpture 3 - Teensy
+
+      This version uses the Teensy 3.2 with audio shield. This is only used for sculpture 3, the VOC sculpture, since the teensy is able to drive a shorter length of led and data cable.
+  
+      Each sculpture has two buttons and one distance sensor each.
       The two buttons play back the two sets of air measurements readings translated into brightness values. 
       One button represents one set of reading and one strip of led.
       There is an idle mode pulsing light animation. Active mode is triggered by button and will show a sequence of brightness values. 
       The distance sensor changes the hue of the leds in real time. 
-      There is a sound for idle mode and one for active playback mode. 
+      There is a sound for idle mode and one for active playback mode. Only applicable for sculpture 3 with the teensy audio shield.
 */
 
 #include <Arduino.h>
@@ -24,9 +26,9 @@
 //-------------------- USER DEFINED SETTINGS --------------------//
 
 //Uncomment one below
-#define __CO2__
+// #define __CO2__
 // #define __PM25__ 
-// #define __VOC__
+#define __VOC__
 
 const int CO2band1 = 25, CO2band2 = 25, PM25band1 = 50, PM25band2 = 50, VOCband1 = 50, VOCband2 = 50; //num of pixels per strip. Each pixel is 10cm.
 
@@ -75,7 +77,7 @@ bool isUserPresent = false;
 
 //-------------------- Light --------------------//
 
-#define LED_TYPE UCS1903
+#define LED_TYPE WS2811
 #define COLOR_ORDER GRB //Yes! GRB!
 
 CHSV strip1Color = cblue;
