@@ -5,7 +5,7 @@
 void read_console()
 {
   button0.update();
-  button1.update(); 
+  button1.update();
 
   if (button0.fallingEdge())
   {
@@ -17,7 +17,7 @@ void read_console()
     isButton1Pressed = true;
     Serial.println("button1 pressed");
   }
- 
+
   if (loxmsec > 100)
   {
     VL53L0X_RangingMeasurementData_t measure;
@@ -25,8 +25,8 @@ void read_console()
     // Serial.print("Reading a measurement... ");
     lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
 
-    if (measure.RangeStatus != 4) 
-    {  // phase failures have incorrect data
+    if (measure.RangeStatus != 4)
+    { // phase failures have incorrect data
       rangeVal = measure.RangeMilliMeter;
 
       if (rangeVal > 1000)
@@ -38,8 +38,8 @@ void read_console()
         isUserPresent = true;
       }
       // Serial.print("Distance (mm): "); Serial.println(rangeVal);
-    } 
-    else 
+    }
+    else
     {
       // Serial.println(" out of range ");
       isUserPresent = false;
@@ -52,14 +52,14 @@ void read_console()
 /*--------------------------------------------------------------------------------
   Changes both led strips colour in real time according to the dist sensor
 --------------------------------------------------------------------------------*/
-void do_colour_variation() 
+void do_colour_variation()
 {
   if (isUserPresent == true)
   {
     strip1Color.hue = map(rangeVal, 0, 500, 76, 204);
     strip2Color.hue = map(rangeVal, 0, 500, 76, 204);
   }
-  else 
+  else
   {
     strip1Color.hue = cblue.hue;
     strip2Color.hue = cblue.hue;
@@ -109,7 +109,7 @@ void register_readings()
 /*--------------------------------------------------------------------------------
   Toggles the playMode according to button press
 --------------------------------------------------------------------------------*/
-void set_playMode() 
+void set_playMode()
 {
   if (isButton0Pressed == true) //process button press
   {
@@ -118,7 +118,7 @@ void set_playMode()
     strip1hasPlayModeChanged = true; //trigger sound change
     Serial.println("strip1 : BUTTON MODE");
 
-    strip1activeLedState = 0;          //reset the led if currently active
+    strip1activeLedState = 0;         //reset the led if currently active
     strip1bandDelay = BAND_DELAY / 4; //speed up the fade animation
   }
 
@@ -129,7 +129,7 @@ void set_playMode()
     strip2hasPlayModeChanged = true; //trigger sound change
     Serial.println("strip2 : BUTTON MODE");
 
-    strip2activeLedState = 0;          //reset the led if currently active
+    strip2activeLedState = 0;         //reset the led if currently active
     strip2bandDelay = BAND_DELAY / 4; //speed up the fade animation
   }
 }
@@ -139,7 +139,7 @@ void set_playMode()
 --------------------------------------------------------------------------------*/
 void strip1_fade()
 {
-  for (int i = 0; i<BAND1; i++)
+  for (int i = 0; i < BAND1; i++)
   {
     leds0[i].fadeToBlackBy(8);
   }
@@ -147,27 +147,27 @@ void strip1_fade()
 
 void strip2_fade()
 {
-  for (int i = 0; i<BAND2; i++)
+  for (int i = 0; i < BAND2; i++)
   {
     leds1[i].fadeToBlackBy(8);
   }
 }
 
-void strip1_set_brightLevel (int brightlvl)
+void strip1_set_brightLevel(int brightlvl)
 {
   strip1Color.val = brightlvl;
 
-  for (int i=0; i<BAND1; i++)
+  for (int i = 0; i < BAND1; i++)
   {
     leds0[i] = strip1Color;
   }
 }
 
-void strip2_set_brightLevel (int brightlvl)
+void strip2_set_brightLevel(int brightlvl)
 {
   strip2Color.val = brightlvl;
 
-  for (int i=0; i<BAND2; i++)
+  for (int i = 0; i < BAND2; i++)
   {
     leds1[i] = strip2Color;
   }
@@ -175,7 +175,7 @@ void strip2_set_brightLevel (int brightlvl)
 
 bool strip1_has_fade()
 {
-  if (leds0[0].getAverageLight() == 0 && leds0[BAND1-1].getAverageLight() == 0)
+  if (leds0[0].getAverageLight() == 0 && leds0[BAND1 - 1].getAverageLight() == 0)
   {
     return true;
   }
@@ -187,7 +187,7 @@ bool strip1_has_fade()
 
 bool strip2_has_fade()
 {
-  if (leds1[0].getAverageLight() == 0 && leds1[BAND2-1].getAverageLight() == 0)
+  if (leds1[0].getAverageLight() == 0 && leds1[BAND2 - 1].getAverageLight() == 0)
   {
     return true;
   }
@@ -244,7 +244,7 @@ void strip1_idle_animation()
   int brightlevel = strip1_get_brightness(strip1brightness);
   strip1Color.val = strip1brightness = brightlevel;
 
-  for (int i=0; i<BAND1; i++)
+  for (int i = 0; i < BAND1; i++)
   {
     leds0[i] = strip1Color;
   }
@@ -263,7 +263,7 @@ void strip2_idle_animation()
   int brightlevel = strip2_get_brightness(strip2brightness);
   strip2Color.val = strip2brightness = brightlevel;
 
-  for (int i=0; i<BAND2; i++)
+  for (int i = 0; i < BAND2; i++)
   {
     leds1[i] = strip2Color;
   }
@@ -276,7 +276,6 @@ void strip2_idle_animation()
     strip2isMaxBrightness = false;
   }
 }
-
 
 /*--------------------------------------------------------------------------------
   Prep to go to idle mode
@@ -318,7 +317,7 @@ void strip1_playback_readings()
   {
     strip1_fade();
 
-    if(strip1_has_fade() == true)
+    if (strip1_has_fade() == true)
     {
       strip1activeLedState = 1;
       strip1bandms = 0;
@@ -332,7 +331,7 @@ void strip1_playback_readings()
     if (strip1bandms < BAND_DELAY * 2) //control the speed of the fade animation here
     {
       strip1currBrightVal = readings1[strip1readingsCounter];
-    
+
       if (strip1currBrightVal > strip1prevBrightVal)
       {
         if (strip1Color.val < strip1currBrightVal)
@@ -362,7 +361,7 @@ void strip1_playback_readings()
 
       strip1bandms = 0; //need to reset here
 
-      unsigned int numElements = sizeof(readings1)/sizeof(readings1[0]);
+      unsigned int numElements = sizeof(readings1) / sizeof(readings1[0]);
 
       if (strip1readingsCounter == numElements)
       {
@@ -378,7 +377,7 @@ void strip1_playback_readings()
     {
       strip1_go_idle();
     }
-  }  
+  }
 }
 
 void strip2_playback_readings()
@@ -387,7 +386,7 @@ void strip2_playback_readings()
   {
     strip2_fade();
 
-    if(strip2_has_fade() == true)
+    if (strip2_has_fade() == true)
     {
       strip2activeLedState = 1;
       strip2bandms = 0;
@@ -401,7 +400,7 @@ void strip2_playback_readings()
     if (strip2bandms < BAND_DELAY * 2) //control the speed of the fade animation here
     {
       strip2currBrightVal = readings2[strip2readingsCounter];
-    
+
       if (strip2currBrightVal > strip2prevBrightVal)
       {
         if (strip2Color.val < strip2currBrightVal)
@@ -431,7 +430,7 @@ void strip2_playback_readings()
 
       strip2bandms = 0; //need to reset here
 
-      unsigned int numElements = sizeof(readings2)/sizeof(readings2[0]);
+      unsigned int numElements = sizeof(readings2) / sizeof(readings2[0]);
 
       if (strip2readingsCounter == numElements)
       {
@@ -447,7 +446,7 @@ void strip2_playback_readings()
     {
       strip2_go_idle();
     }
-  }  
+  }
 }
 
 /*--------------------------------------------------------------------------------
@@ -457,7 +456,7 @@ void play_audio()
 {
   if (strip1playMode == IDLE_MODE && strip2playMode == IDLE_MODE)
   {
-    if ( (strip1hasPlayModeChanged == true || strip2hasPlayModeChanged) && playSdWav1.isPlaying() == true)
+    if ((strip1hasPlayModeChanged == true || strip2hasPlayModeChanged) && playSdWav1.isPlaying() == true)
     {
       playSdWav1.stop();
       playSdWav1.play(idleTrack);
@@ -476,7 +475,7 @@ void play_audio()
   }
   else if (strip1playMode == BUTTON_MODE || strip2playMode == BUTTON_MODE)
   {
-    if ( (strip1hasPlayModeChanged == true || strip2hasPlayModeChanged == true) && playSdWav1.isPlaying() == true)
+    if ((strip1hasPlayModeChanged == true || strip2hasPlayModeChanged == true) && playSdWav1.isPlaying() == true)
     {
       playSdWav1.stop();
       playSdWav1.play(activeTrack);
@@ -491,6 +490,21 @@ void play_audio()
       delay(10);
       Serial.print("Start playing ");
       Serial.println(activeTrack);
+    }
+  }
+}
+
+/*--------------------------------------------------------------------------------
+  add glitter
+--------------------------------------------------------------------------------*/
+void add_glitter()
+{
+  if (SCULPTURE_ID == 3)
+  {
+    if (random8() < 80) //random8() returns a rand num from 0 - 255
+    {
+      leds0[random16(VOCband1)] += CRGB::White;
+      leds1[random16(VOCband2)] += CRGB::White;
     }
   }
 }

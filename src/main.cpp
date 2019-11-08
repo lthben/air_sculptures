@@ -195,6 +195,8 @@ void loop()
     strip2_playback_readings(); //play brightness sequence according to readings[] array
   } 
 
+  add_glitter();
+
   FastLED.show();
   FastLED.delay(1000 / UPDATES_PER_SECOND);
   
