@@ -4,18 +4,25 @@
 --------------------------------------------------------------------------------*/
 void read_console()
 {
-  button0.update();
-  button1.update();
+  if (strip1playMode == IDLE_MODE)
+  {
+    button0.update();
 
-  if (button0.fallingEdge())
-  {
-    isButton0Pressed = true;
-    Serial.println("button0 pressed");
+    if (button0.fallingEdge())
+    {
+      isButton0Pressed = true;
+      Serial.println("button0 pressed");
+    }
   }
-  if (button1.fallingEdge())
+  if (strip2playMode == IDLE_MODE)
   {
-    isButton1Pressed = true;
-    Serial.println("button1 pressed");
+    button1.update();
+
+    if (button1.fallingEdge())
+    {
+      isButton1Pressed = true;
+      Serial.println("button1 pressed");
+    }
   }
 
   if (loxmsec > 100)
@@ -503,8 +510,10 @@ void add_glitter()
   {
     if (random8() < 55) //random8() returns a rand num from 0 - 255
     {
-      leds0[random16(VOCband1)] += CRGB::White;
-      leds1[random16(VOCband2)] += CRGB::White;
+      if (strip1playMode == IDLE_MODE)
+        leds0[random16(VOCband1)] += CRGB::White;
+      if (strip2playMode == IDLE_MODE)
+        leds1[random16(VOCband2)] += CRGB::White;
     }
   }
 }
