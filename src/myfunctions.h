@@ -501,7 +501,7 @@ void add_glitter()
 {
   if (SCULPTURE_ID == 3)
   {
-    if (random8() < 80) //random8() returns a rand num from 0 - 255
+    if (random8() < 55) //random8() returns a rand num from 0 - 255
     {
       leds0[random16(VOCband1)] += CRGB::White;
       leds1[random16(VOCband2)] += CRGB::White;
