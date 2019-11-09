@@ -82,33 +82,33 @@ void register_readings()
   {
     for (int i = 0; i < 17; i++)
     {
-      readings1[i] = int(map(CO2_1[i], 0, 1800, 0, 255));
+      readings1[i] = int(map(CO2_1[i], 0, 1800, 64, 255));
     }
     for (int i = 0; i < 40; i++)
     {
-      readings2[i] = int(map(CO2_2[i], 0, 1800, 0, 255));
+      readings2[i] = int(map(CO2_2[i], 0, 1800, 64, 255));
     }
   }
   else if (SCULPTURE_ID == 2)
   {
     for (int i = 0; i < 20; i++)
     {
-      readings1[i] = int(map(PM25_1[i], 0, 125, 0, 255));
+      readings1[i] = int(map(PM25_1[i], 0, 125, 64, 255));
     }
     for (int i = 0; i < 32; i++)
     {
-      readings2[i] = int(map(PM25_2[i], 0, 125, 0, 255));
+      readings2[i] = int(map(PM25_2[i], 0, 125, 64, 255));
     }
   }
   else //sculpture 3
   {
     for (int i = 0; i < 26; i++)
     {
-      readings1[i] = int(map(VOC_1[i], 0, 130, 0, 255));
+      readings1[i] = int(map(VOC_1[i], 0, 130, 80, 255));
     }
     for (int i = 0; i < 22; i++)
     {
-      readings2[i] = int(map(VOC_2[i], 0, 130, 0, 255));
+      readings2[i] = int(map(VOC_2[i], 0, 130, 80, 255));
     }
   }
 }
