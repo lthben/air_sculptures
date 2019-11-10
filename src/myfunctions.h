@@ -68,8 +68,22 @@ void do_colour_variation()
   }
   else
   {
-    strip1Color.hue = cblue.hue;
-    strip2Color.hue = cblue.hue;
+    if (strip1playMode == IDLE_MODE)
+    {
+      strip1Color = idleColor;
+    }
+    else if (strip1playMode == BUTTON_MODE)
+    {
+      strip1Color = activeColor;
+    }
+    if (strip2playMode == IDLE_MODE)
+    {
+      strip2Color = idleColor;
+    }
+    else if (strip2playMode == BUTTON_MODE)
+    {
+      strip2Color = activeColor;
+    }
   }
 }
 

@@ -30,6 +30,9 @@
 // #define __PM25__ 
 #define __VOC__
 
+CHSV activeColor(140,255,255); //light blue
+CHSV idleColor(140,128,255); //half the saturation
+
 const int CO2band1 = 25, CO2band2 = 25, PM25band1 = 50, PM25band2 = 50, VOCband1 = 50, VOCband2 = 50; //num of pixels per strip. Each pixel is 10cm.
 
 const int CO2_1[17] = { 1609, 577, 406, 419, 443, 414, 403, 413, 409, 411, 412, 409, 423, 414, 421, 434, 421 };
@@ -41,7 +44,6 @@ const int PM25_2[32] = { 65, 88, 44, 42, 73, 69, 70, 61, 54, 89, 86, 91, 60, 63,
 const int VOC_1[26] = { 8, 11, 5, 13, 16, 14, 15, 17, 15, 20, 29, 21, 22, 19, 14, 13, 19, 25, 17, 15, 13, 17, 16, 15, 20, 17 };
 const int VOC_2[22] = { 122, 67, 24, 36, 46, 32, 29, 34, 27, 25, 22, 23, 19, 23, 21, 33, 26, 34, 41, 15, 25, 18 };
 
-CHSV cblue(140,255,255);
 const int BAND_DELAY = 500;   //controls led animation speed
 
 //-------------------- Audio --------------------//
@@ -80,8 +82,8 @@ bool isUserPresent = false;
 #define LED_TYPE WS2811
 #define COLOR_ORDER GRB //Yes! GRB!
 
-CHSV strip1Color = cblue;
-CHSV strip2Color = cblue;
+CHSV strip1Color = idleColor;
+CHSV strip2Color = idleColor;
 
 #if defined(__CO2__)
 const int BAND1 = CO2band1, BAND2 = CO2band2;
