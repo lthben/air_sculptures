@@ -63,8 +63,8 @@ void do_colour_variation()
 {
   if (isUserPresent == true)
   {
-    strip1Color.hue = map(rangeVal, 0, 500, 76, 204);
-    strip2Color.hue = map(rangeVal, 0, 500, 76, 204);
+    strip1Color.hue = map(rangeVal, 20, 400, 76, 204);
+    strip2Color.hue = map(rangeVal, 20, 400, 76, 204);
   }
   else
   {
