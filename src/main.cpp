@@ -61,9 +61,9 @@ AudioControlSGTL5000 sgtl5000_1; //xy=615,336
 #define SDCARD_MOSI_PIN 7
 #define SDCARD_SCK_PIN 14
 
-float vol = 0.4; //master volume gain 0.0 - 1.0
+float vol = 0.7; //master volume gain 0.0 - 1.0
 
-const char *idleTrack = "DRONE1.WAV"; const char *activeTrack = "DRONE2.WAV";
+const char *idleTrack = "AIRIDLE.WAV"; const char *activeTrack = "AIR3.WAV";
 
 //-------------------- Buttons and distance sensor --------------------//
 
